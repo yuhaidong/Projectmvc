@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd"
+	default-lazy-init="true">
+
+	<!-- 
+		此文件：		
+			shiro-context.xml
+		被文件：		
+			web.xml
+		所引用。
+	-->
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/view/projectmvc/page/error.html" />
+		<property name="successUrl" value="/projectmvc/index.do" />
+		<property name="filters">
+			<util:map>
+				<entry key="authc" value-ref="authcFilter" />
+				<entry key="user" value-ref="authcFilter" />
+				<entry key="logout" value-ref="authcFilter" />
+				<!--
+				-->
+				<entry key="jCaptchaValidate" value-ref="jCaptchaValidateFilter" />
+				<!--
+					<entry key="user" value-ref="userFilter" /> <entry key="logout"
+					value-ref="logoutFilter" />
+				-->
+			</util:map>
+		</property>
+		<!--anon匿名 authc登录认证  user用户已登录 logout退出filter-->
+		<property name="filterChainDefinitions">
+			<value>
+			<!-- 
+			-->
+				<!-- -->
+					*.html = anon
+				 
+				<!-- 
+				/sys/** = user 
+				-->
+				/projectmvc/captcha_view = anon
+				/login.html = authc
+				/projectmvc/login.do = jCaptchaValidate,authc
+				/projectmvc/logout.do = logout
+				/projectmvc/** =user
+			</value>
+		</property>
+	</bean>
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="authorizingRealm" />
+		<property name="cacheManager" ref="shiroEhcacheManager" />
+	</bean>
+
+	<bean id="authorizingRealm"
+		class="com.yhd.project.projectmvc.module.login.security.ProjectmvcAuthorizingRealm">
+		<property name="ProjectmvcUserManager" ref="ProjectmvcUserManager" />
+	</bean>
+	<!-- 
+	<bean id="YhdmvcUserManager" class="com.yhd.yhdmvc.module.login.manager.impl.YhdmvcUserManagerImpl" />
+	<bean id="YhdmvcUserDao" class="com.yhd.yhdmvc.module.login.dao.impl.YhdmvcUserDaoImpl" />
+	 -->
+	<bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" />
+
+	<!-- Shiro Filter -->
+	<bean id="adminUrlBean" class="com.yhd.project.projectmvc.module.login.security.ProjectmvcAdminUrl">
+		<property name="adminLogin" value="/projectmvc/login.do" />
+		<property name="adminPrefix" value="/projectmvc/" />
+	</bean>
+	<bean id="authcFilter"
+		class="com.yhd.project.projectmvc.module.login.security.ProjectmvcAuthenticationFilter"
+		parent="adminUrlBean">
+		<property name="adminIndex" value="/projectmvc/index.do" />
+		<!-- captchaEnable标记是否开启验证码 -->
+		<property name="captchaEnable" value="false" />
+		<property name="loginWhiteListEnable" value="false" />
+	</bean>
+	
+	<!--
+	-->
+	<bean id="jCaptchaValidateFilter"
+		class="com.yhd.project.projectmvc.module.login.security.CaptchaValidateFilter"
+		parent="adminUrlBean">
+		<property name="adminIndex" value="/projectmvc/index.do" />
+	</bean>
+	
+	<!--
+		<bean id="authcFilter"
+		class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+		<property name="usernameParam" value="username" /> <property
+		name="passwordParam" value="password" /> <property name="loginUrl"
+		value="/login.jsp" /> </bean>
+	-->
+</beans>

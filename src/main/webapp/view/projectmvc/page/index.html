@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>内控系统</title>
+
+<script type="text/javascript" charset="utf-8"
+	src="/view/projectmvc/res/js/jquery-2.2.0.js">
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+		//页面刚加载时调用此异步方法，用来展示页面数据
+		$.ajax({
+			type : "POST",
+			url : "/projectmvc/userlist.do",
+			//		data : code,
+			success : callBackSuccess,
+			error : callBackError
+		});
+
+		//双击div时可以直接编辑文本内容
+		$("#info").dblclick(function() {
+
+			//给当前的div内部增加一个input，以用来输入文本
+			$(this).html("<input type='text' id='text' value='" + $("#text").text() +"'>");
+			
+			//得到新生成的input
+			var txt = $("input[id=text]");
+			//让这个input立刻获得焦点
+			txt.focus();
+			
+			//当前input失去焦点的时候，异步访问后台将修内容存入改数据库
+			txt.blur(function() {
+				
+				//将info这个div中的内容重新更换会div，也就是把输入内容时的input覆盖，以显示文本内容
+				$("#info").html("<div id='text'>" + $("input[id=text]").val() +"</div>");
+
+				//通过ajax异步调用后台服务，将内容更新至数据库
+				$.ajax({
+					url : "/projectmvc/userUpdate.do",
+					type : 'POST',
+					data : {
+						'description' : $("#text").text()
+					},
+					dataType : 'json',
+					success : function(data) {
+						//alert(data.description);
+					}
+				});
+
+			});
+			
+		});
+
+	});
+
+	//异步调用显示个人信息正确时
+	function callBackSuccess(data) {
+		
+		//显示用户姓名
+		$('#displayName').text(data.displayName);
+		//显示备注信息
+		$("#text").text(data.description);
+	}
+
+	//异步调用显示个人信息错误时
+	function callBackError(XMLHttpRequest, textStatus, errorThrown) {
+		//调用错误
+		alert("error");
+		//显示错误信息
+		alert(XMLHttpRequest.readyState + XMLHttpRequest.status
+				+ XMLHttpRequest.responseText);
+	}
+</script>
+
+</head>
+<body>
+
+	<div>登陆成功！</div>
+	<table width="750" border="0" align="center" cellpadding="0"
+		cellspacing="0">
+		<tr>
+			<td>
+				<div style="width: 80px; border: 1px">用户姓名：</div>
+				<div style="width: 80px; border: 1px">备注信息：</div>
+			</td>
+			<td>
+				<div id="name">
+					<div id="displayName"
+						style="text-align: left; width: 500px; background: #def;">
+					</div>
+					
+					<div id="info">
+						<div id="text">
+							123
+						</div>
+					</div>
+					
+				</div>
+			</td>
+		</tr>
+	</table>
+
+</body>
+</html>

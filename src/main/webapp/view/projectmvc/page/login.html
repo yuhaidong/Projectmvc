@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Login Panel</title>
+		
+		
+
+		<style type="text/css">
+body {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	
+}
+
+.input {
+	width: 150px;
+	height: 17px;
+	border-top: 1px solid #404040;
+	border-left: 1px solid #404040;
+	border-right: 1px solid #D4D0C8;
+	border-bottom: 1px solid #D4D0C8;
+}
+</style>
+
+<script type="text/javascript">
+
+function loginSubmitCheck() {
+	
+	if(!$("#username").val()) {
+		alert("请输入用户名");
+		return false;
+	}
+	
+	if(!$("#password").val()) {
+		alert("请输入密码");
+		return false;
+	}
+	
+	//if(!$("#veryCode").val()) {
+	//	alert("请输入验证码");
+	//	return false;
+	//}
+	
+	//return isRightCode();
+}
+    	
+    	 function changeImg(){
+    		 
+    	    var imgSrc = $("#imgObj");     
+    	    var src = imgSrc.attr("src");     
+    	    imgSrc.attr("src",chgUrl(src));
+    	}     
+    	//时间戳     
+    	//为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳     
+    	function chgUrl(url){     
+    	    var timestamp = (new Date()).valueOf();     
+    	    urlurl = url.substring(0,17);     
+    	    if((url.indexOf("&")>=0)){     
+    	        urlurl = url + "×tamp=" + timestamp;     
+    	    }else{     
+    	        urlurl = url + "?timestamp=" + timestamp;     
+    	    }
+    	    
+    	    return urlurl;
+    	}     
+    	function isRightCode(){     
+    	    var code = "c=" + $("#veryCode").val();     
+    	    
+    	    $.ajax({     
+    	        type: "POST",     
+    	        url: "resultServlet/validateCode",     
+    	        data: code,     
+    	        success: callBackSuccess,
+    	        error: callBackError
+    	    });
+    	}
+
+    	function callBackSuccess(data){
+    	    $("#info").html(data);     
+    	}
+    	
+    	function callBackError() {
+    		alert("error");
+    	}
+    	
+    	</script>
+
+	</head>
+	<body>
+	
+		
+		<form id="jvForm" action="login.do" method="post">
+
+
+			<table width="750" border="0" align="center" cellpadding="0"
+				cellspacing="0">
+				<tr>
+					<td height="200" align="center">
+
+					</td>
+				</tr>
+				<tr>
+					<td height="200" align="center">
+
+						<table width="200" border="0" align="center" cellpadding="0"
+				cellspacing="0">
+							<tr>
+								<td>
+									用户名：
+								</td>
+								<td>
+
+									<input name="username" type="input" id="username"
+										maxlength="100" class="input" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									密码：
+								</td>
+								<td>
+
+									<input name="password" type="password" id="password"
+										maxlength="32" class="input" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									验证码：
+								</td>
+								<td>
+
+									<input id="captcha" name="captcha" type="text"
+										maxlength="32" class="input" />
+								</td>
+								<td>
+									<img id="imgObj"  alt="" src="/projectmvc/captcha_view"/>       
+							        <a href="#" onclick="changeImg()">换一张</a>       
+							        <input class="image" type="button" value="验证" onclick="isRightCode()"/>
+						        </td>       
+							</tr>
+							<tr>
+								<td colspan="2">
+
+									<input id="submit" type="image" name="submit"
+										src="/view/projectmvc/res/img/login/login.jpg"
+										onclick="return loginSubmitCheck()" />
+									<input id="reset" type="image" name="reset"
+										src="/view/projectmvc/res/img/login/reset.jpg"
+										onclick="document.forms[0].reset()" />
+								</td>
+							</tr>
+						</table>
+
+
+
+						<br />
+					</td>
+				</tr>
+				<tr>
+					<td height="200" align="center">
+
+					</td>
+				</tr>
+			</table>
+
+		</form>
+
+	</body>
+</html>

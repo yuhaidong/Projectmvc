@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/jee 
+	http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	"
+	default-lazy-init="true">
+
+	<!-- 
+		此文件：		
+			projectmvc-servlet-admin.xml
+		被文件：		
+			web.xml		
+		所引用。
+	-->
+	<!-- 
+	<context:annotation-config/>
+	 -->
+	<!-- 
+	<context:component-scan base-package="com.yhd.yhdmvc.module.login" />
+	 --> 
+    <context:component-scan base-package="com.yhd.project.projectmvc.module.login.controller" use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<mvc:annotation-driven></mvc:annotation-driven>
+
+	<!-- Spring3.1之前版本，开启注解式处理器@Controller或@RequestMapping的支持 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<!--
+			<property name="webBindingInitializer"> <bean class="
+			com.jeecms.common.web.springmvc.BindingInitializer"/> </property>
+		-->
+	</bean>
+
+	<!-- Spring3.1之前版本，开启注解式处理器@Controller或@RequestMapping的支持 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<!-- 
+		<property name="interceptors">
+			<list>
+				<ref bean="adminContextInterceptor" />
+				<ref bean="adminLocaleIntercept" />
+				<ref bean="fireWallInterceptor" />
+			</list>
+		</property>
+		 -->
+	</bean>
+	
+	<!-- 
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/sys/blog/page/" />
+		<property name="suffix" value=".html" />
+	</bean>
+	 -->
+	 
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/view/projectmvc/page/" />
+		<property name="suffix" value=".html" />
+	</bean>
+	 
+	<!--
+	<bean id="adminContextInterceptor" class="com.yhd.yhdblog.core.web.AdminContextInterceptor">
+		
+		<property name="auth" value="true" />
+		<property name="excludeUrls">
+			<list>
+				<value>/login.do</value>
+				<value>/logout.do</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="adminLocaleIntercept" class="com.yhd.yhdblog.core.web.AdminLocaleInterceptor" />
+
+	<bean id="fireWallInterceptor" class="com.yhd.yhdblog.core.web.FireWallInterceptor" />
+	-->
+
+	<!-- 启用spring mvc 注解，如类字段上的@Autowired自动装配 -->
+	<!--
+	<context:annotation-config/>
+	 -->
+
+	<!--引入包含的action-->
+	<!-- 
+	<import resource="configbean/yhdmvc-servlet-admin-action.xml" />
+	 -->
+</beans>
