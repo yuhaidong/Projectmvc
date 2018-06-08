@@ -9,7 +9,7 @@ import org.springframework.util.Assert;
 
 public class MyBeanUtils {
 	/**
-	 * 直接读取对象属�?�?无视private/protected修饰�?不经过getter函数.
+	 * 直接读取对象属性值,无视private/protected修饰符,不经过getter函数.
 	 */
 	public static Object getFieldValue(final Object object,
 			final String fieldName) {
@@ -32,7 +32,7 @@ public class MyBeanUtils {
 	}
 
 	/**
-	 * 直接设置对象属�?�?无视private/protected修饰�?不经过setter函数.
+	 * 直接设置对象属性值,无视private/protected修饰符,不经过setter函数.
 	 */
 	public static void setFieldValue(final Object object,
 			final String fieldName, final Object value) {
@@ -74,14 +74,14 @@ public class MyBeanUtils {
 			try {
 				return superClass.getDeclaredField(fieldName);
 			} catch (NoSuchFieldException e) {
-				// Field不在当前类定�?继续向上转型
+				// Field不在当前类定义,继续向上转型
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * 强制转换fileld可访�?
+	 * 强制转换fileld可访问.
 	 */
 	protected static void makeAccessible(final Field field) {
 		if (!Modifier.isPublic(field.getModifiers())

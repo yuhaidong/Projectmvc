@@ -1,5 +1,5 @@
 package com.yhd.project.projectmvc.module.login.entity;
-// Generated 2018-4-20 15:48:43 by Hibernate Tools 5.2.1.Final
+// Generated 2018-4-21 16:23:12 by Hibernate Tools 5.2.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
